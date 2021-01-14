@@ -7,6 +7,8 @@ let direction = 1;
 const width = 10;
 let appleIndex = 0;
 let score = 0;
+let intervalTime = 1000;
+let speed = 0.9;
 
 //layout
 function createGrid() {
@@ -40,9 +42,7 @@ function move() {
   if (squares[currentSnake[0]].classList.contains("apple")) {
     squares[currentSnake[0]].classList.remove("apple");
     squares[tail].classList.add("snake");
-    console.log(tail);
     currentSnake.push(tail);
-    console.log(currentSnake);
 
     generateApple();
 
@@ -55,7 +55,12 @@ function move() {
 }
 move();
 
-let timerId = setInterval(move, 1000);
+let timerId = setInterval(move, intervalTime);
+
+//snake speed
+clearInterval(timerId);
+intervalTime = intervalTime * speed;
+timerId = setInterval(move, intervalTime);
 
 function generateApple() {
   do {
@@ -73,16 +78,12 @@ generateApple();
 //controls
 function control(e) {
   if (e.keyCode === 39) {
-    console.log("right pressed");
     direction = 1;
   } else if (e.keyCode === 38) {
-    console.log("up pressed");
     direction = -width;
   } else if (e.keyCode === 37) {
-    console.log("left pressed");
     direction = -1;
   } else if (e.keyCode === 40) {
-    console.log("down pressed");
     direction = +width;
   }
 }
