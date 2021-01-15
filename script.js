@@ -11,7 +11,6 @@ let intervalTime = 1000;
 let speed = 0.9;
 let timerId = 0;
 
-//layout
 function createGrid() {
   for (let i = 0; i < width * width; i++) {
     const square = document.createElement("div");
@@ -22,15 +21,19 @@ function createGrid() {
 }
 createGrid();
 
-//snake
 currentSnake.forEach(index => squares[index].classList.add("snake"));
 
 function startGame() {
+  currentSnake.forEach(index => squares[index].classList.remove("snake"));
+  squares[appleIndex].classList.remove("apple");
   clearInterval(timerId);
   currentSnake = [2, 1, 0];
   score = 0;
+  scoreDisplay.textContent = score;
   direction = 1;
   intervalTime = 1000;
+  generateApple();
+  currentSnake.forEach(index => squares[index].classList.add("snake"));
   timerId = setInterval(move, intervalTime);
 }
 
@@ -48,26 +51,25 @@ function move() {
   squares[tail].classList.remove("snake");
   currentSnake.unshift(currentSnake[0] + direction);
 
-  //apple
   if (squares[currentSnake[0]].classList.contains("apple")) {
     squares[currentSnake[0]].classList.remove("apple");
     squares[tail].classList.add("snake");
     currentSnake.push(tail);
 
+    //generate new apple
     generateApple();
-
-    //score
+    //add one to the score
     score++;
+    //display our score
     scoreDisplay.textContent = score;
+    //speed up snake
+    clearInterval(timerId);
+    intervalTime = intervalTime * speed;
+    timerId = setInterval(move, intervalTime);
   }
 
   squares[currentSnake[0]].classList.add("snake");
 }
-
-//snake speed
-clearInterval(timerId);
-intervalTime = intervalTime * speed;
-timerId = setInterval(move, intervalTime);
 
 function generateApple() {
   do {
@@ -82,7 +84,6 @@ generateApple();
 // 37 is for the left arrow
 // 40 is for the down arrow
 
-//controls
 function control(e) {
   if (e.keyCode === 39) {
     direction = 1;
