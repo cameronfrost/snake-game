@@ -9,6 +9,7 @@ let appleIndex = 0;
 let score = 0;
 let intervalTime = 1000;
 let speed = 0.9;
+let timerId = 0;
 
 //layout
 function createGrid() {
@@ -23,6 +24,15 @@ createGrid();
 
 //snake
 currentSnake.forEach(index => squares[index].classList.add("snake"));
+
+function startGame() {
+  clearInterval(timerId);
+  currentSnake = [2, 1, 0];
+  score = 0;
+  direction = 1;
+  intervalTime = 1000;
+  timerId = setInterval(move, intervalTime);
+}
 
 function move() {
   if (
@@ -53,9 +63,6 @@ function move() {
 
   squares[currentSnake[0]].classList.add("snake");
 }
-move();
-
-let timerId = setInterval(move, intervalTime);
 
 //snake speed
 clearInterval(timerId);
@@ -88,3 +95,4 @@ function control(e) {
   }
 }
 document.addEventListener("keyup", control);
+startButton.addEventListener("click", startGame);
